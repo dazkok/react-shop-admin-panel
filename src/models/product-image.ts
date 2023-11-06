@@ -4,5 +4,4 @@ export interface ProductImage {
     alt: string;
     product_id: number;
     order: number;
-    enable: boolean;
 }

@@ -69,6 +69,7 @@ const Users = () => {
         })
             .then(response => {
                 users[index].enable = enable;
+                filteredTable[index].enable = enable;
             })
             .catch(error => {
                 console.error('Error while sending a enable request:', error);
@@ -124,7 +125,7 @@ const Users = () => {
                                 <TableBody>
                                     {filteredTable.slice(page * perPage, (page + 1) * perPage).map((user, index) => {
                                         return (
-                                            <TableRow key={index}>
+                                            <TableRow key={user.id}>
                                                 <TableCell>{user.id}</TableCell>
                                                 <TableCell>{user.first_name} {user.last_name}</TableCell>
                                                 <TableCell>{user.email}</TableCell>

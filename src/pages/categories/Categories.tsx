@@ -120,7 +120,7 @@ const Categories = (props: any) => {
 
                         {filteredTable.slice(page * perPage, (page + 1) * perPage).map((category, index) => {
                             return (
-                                <Accordion key={index}>
+                                <Accordion key={category.id}>
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon/>}
                                         id={`category-${category.id}`}

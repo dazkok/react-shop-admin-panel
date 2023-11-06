@@ -16,9 +16,8 @@ import {Product} from "../../models/product";
 const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(25);
+    const [perPage, setPerPage] = useState(10);
     const [filteredTable, setFilteredTable] = useState<Product[]>([]);
-    const [switchStates, setSwitchStates] = useState<boolean[]>([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [deleteId, setDeleteId] = useState<number>(0);
 
@@ -29,7 +28,6 @@ const Products = () => {
 
                 setProducts(data);
                 setFilteredTable(data);
-                setSwitchStates(products.map((product) => product.enable));
             }
         )()
     }, []);
@@ -46,6 +44,7 @@ const Products = () => {
         })
             .then(response => {
                 products[index].enable = enable;
+                filteredTable[index].enable = enable;
             })
             .catch(error => {
                 console.error('Error while sending a enable request:', error);
@@ -120,7 +119,7 @@ const Products = () => {
                                 <TableBody>
                                     {filteredTable.slice(page * perPage, (page + 1) * perPage).map((product, index) => {
                                         return (
-                                            <TableRow key={index}>
+                                            <TableRow key={product.id}>
                                                 <TableCell>{product.id}</TableCell>
                                                 <TableCell>
                                                     <img src={product.image.image} alt={''} loading="lazy"
