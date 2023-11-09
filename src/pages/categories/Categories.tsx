@@ -6,7 +6,7 @@ import Layout from "../../components/Layout";
 import Button from "@mui/material/Button";
 import {
     Accordion, AccordionDetails,
-    AccordionSummary,
+    AccordionSummary, CircularProgress,
     Grid,
     Paper,
     TablePagination,
@@ -29,6 +29,7 @@ const Categories = (props: any) => {
         title: '',
         message: ''
     });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (
@@ -37,6 +38,7 @@ const Categories = (props: any) => {
 
                 setCategories(data);
                 setFilteredTable(data);
+                setLoading(false);
             }
         )();
     }, [])
@@ -48,14 +50,19 @@ const Categories = (props: any) => {
 
     const deleteCategory = async (id: number) => {
         try {
+            setLoading(true);
+
             const result = await axios.delete(`categories/delete`, {
                 data: {
                     id: id
                 }
             });
 
-            setCategories(categories.filter(category => category.id !== id));
-            setFilteredTable(filteredTable.filter(category => category.id !== id));
+            setCategories(filterDeletedCategory(categories, id));
+            setFilteredTable(filterDeletedCategory(filteredTable, id));
+
+            setLoading(false);
+
             if (result.status === 204) {
                 setInfoDialog({
                     show: true,
@@ -70,6 +77,7 @@ const Categories = (props: any) => {
                 });
             }
         } catch (error: any) {
+            setLoading(false);
             if (error.response) {
                 const responseData = error.response.data;
 
@@ -83,6 +91,14 @@ const Categories = (props: any) => {
                 alert('An error occurred while communicating with the server.');
             }
         }
+    }
+
+    const filterDeletedCategory = (categories: Category[], id: number) => {
+        return categories.filter(category => {
+            category.subcategories = filterDeletedCategory(category.subcategories, id);
+
+            return category.id !== id;
+        });
     }
 
     const searchInTable = (searched: string) => {
@@ -108,78 +124,87 @@ const Categories = (props: any) => {
                                 style={{maxWidth: '200px'}}
                         >Add category</Button>
 
-                        <TextField
-                            variant='outlined'
-                            label={'search'}
-                            placeholder='search...'
-                            size={'small'}
-                            type='search'
-                            onKeyUp={e => searchInTable((e.target as HTMLInputElement).value)}
-                            sx={{mb: 3}}
-                        />
+                        {loading ? (
+                            <div className={'text-center mt-3'}>
+                                <CircularProgress color="success"/>
+                            </div>
+                        ) : (
+                            <>
+                                <TextField
+                                    variant='outlined'
+                                    label={'search'}
+                                    placeholder='search...'
+                                    size={'small'}
+                                    type='search'
+                                    onKeyUp={e => searchInTable((e.target as HTMLInputElement).value)}
+                                    sx={{mb: 3}}
+                                />
 
-                        {filteredTable.slice(page * perPage, (page + 1) * perPage).map((category, index) => {
-                            return (
-                                <Accordion key={category.id}>
-                                    <AccordionSummary
-                                        expandIcon={<ExpandMoreIcon/>}
-                                        id={`category-${category.id}`}
-                                    >
-                                        <CategoryHeader id={category.id}
-                                                        title={category.title}
-                                                        image={'http://localhost:8010/images/' + category.image}
-                                                        deleteFunction={handleClickOpenDeleteDialog}
-                                        />
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                        {category.subcategories.map((subcategory, index2) => {
-                                            return (
-                                                <Accordion key={index2}>
-                                                    <AccordionSummary
-                                                        expandIcon={<ExpandMoreIcon/>}
-                                                        id={`category-${subcategory.id}`}
-                                                    >
-                                                        <CategoryHeader id={subcategory.id}
-                                                                        title={subcategory.title}
-                                                                        image={'http://localhost:8010/images/' + subcategory.image}
-                                                                        deleteFunction={handleClickOpenDeleteDialog}
-                                                        />
-                                                    </AccordionSummary>
-                                                    <AccordionDetails>
-                                                        <Box></Box>
-                                                        {subcategory.subcategories.map((subcategory3, index3) => {
-                                                            return (
-                                                                <Box key={index3} sx={{p: 2, boxShadow: 1}}>
-                                                                    <CategoryHeader id={subcategory3.id}
-                                                                                    title={subcategory3.title}
-                                                                                    image={'http://localhost:8010/images/' + subcategory3.image}
-                                                                                    deleteFunction={handleClickOpenDeleteDialog}
-                                                                    />
-                                                                </Box>
-                                                            )
-                                                        })}
-                                                    </AccordionDetails>
-                                                </Accordion>
-                                            )
-                                        })}
-                                    </AccordionDetails>
-                                </Accordion>
-                            )
-                        })}
-                        <TablePagination
-                            component={'div'}
-                            count={filteredTable.length}
-                            page={page}
-                            onPageChange={(e, newPage) => setPage(newPage)}
-                            rowsPerPage={perPage}
-                            rowsPerPageOptions={[5, 10, 20, 50]}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            sx={{mt: 3}}
-                        />
+                                {filteredTable.slice(page * perPage, (page + 1) * perPage).map((category, index) => {
+                                    return (
+                                        <Accordion key={category.id}>
+                                            <AccordionSummary
+                                                expandIcon={<ExpandMoreIcon/>}
+                                                id={`category-${category.id}`}
+                                            >
+                                                <CategoryHeader id={category.id}
+                                                                title={category.title}
+                                                                image={'http://localhost:8010/images/' + category.image}
+                                                                deleteFunction={handleClickOpenDeleteDialog}
+                                                />
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                {category.subcategories.map((subcategory, index2) => {
+                                                    return (
+                                                        <Accordion key={index2}>
+                                                            <AccordionSummary
+                                                                expandIcon={<ExpandMoreIcon/>}
+                                                                id={`category-${subcategory.id}`}
+                                                            >
+                                                                <CategoryHeader id={subcategory.id}
+                                                                                title={subcategory.title}
+                                                                                image={'http://localhost:8010/images/' + subcategory.image}
+                                                                                deleteFunction={handleClickOpenDeleteDialog}
+                                                                />
+                                                            </AccordionSummary>
+                                                            <AccordionDetails>
+                                                                <Box></Box>
+                                                                {subcategory.subcategories.map((subcategory3, index3) => {
+                                                                    return (
+                                                                        <Box key={index3} sx={{p: 2, boxShadow: 1}}>
+                                                                            <CategoryHeader id={subcategory3.id}
+                                                                                            title={subcategory3.title}
+                                                                                            image={'http://localhost:8010/images/' + subcategory3.image}
+                                                                                            deleteFunction={handleClickOpenDeleteDialog}
+                                                                            />
+                                                                        </Box>
+                                                                    )
+                                                                })}
+                                                            </AccordionDetails>
+                                                        </Accordion>
+                                                    )
+                                                })}
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    )
+                                })}
+                                <TablePagination
+                                    component={'div'}
+                                    count={filteredTable.length}
+                                    page={page}
+                                    onPageChange={(e, newPage) => setPage(newPage)}
+                                    rowsPerPage={perPage}
+                                    rowsPerPageOptions={[5, 10, 20, 50]}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                    sx={{mt: 3}}
+                                />
+                            </>
+                        )}
                     </Paper>
                 </Grid>
             </Grid>
-            <DeleteDialog open={openDeleteDialog} onDelete={deleteCategory} setOpen={setOpenDeleteDialog} id={deleteId}/>
+            <DeleteDialog open={openDeleteDialog} onDelete={deleteCategory} setOpen={setOpenDeleteDialog}
+                          id={deleteId}/>
             <InfoDialog dialogData={infoDialog} setInfoDialog={setInfoDialog}/>
         </Layout>
     );

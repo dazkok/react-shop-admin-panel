@@ -4,10 +4,13 @@ import {TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import {ProductImage} from "../../models/product-image";
 
-const ProductImageFied = (props: { image: ProductImage }) => {
+const ProductImageField = (props: { image: ProductImage, removeImage: Function, setImageAlt: Function }) => {
 
     return (
-        <Box key={props.image.id} sx={{display: 'flex', mb: 3, border: '1px solid black'}}>
+        <Box key={props.image.id}
+             width={'400px'}
+             sx={{display: 'flex', boxShadow: 2, background: 'white'}}
+        >
             <img src={'http://localhost:8010/images/' + props.image.image}
                  alt={'preview'}
                  style={{objectFit: "cover"}}
@@ -20,9 +23,9 @@ const ProductImageFied = (props: { image: ProductImage }) => {
                            value={props.image.alt}
                            margin="normal"
                            inputProps={{
-                               maxLength: 70,
+                               maxLength: 70
                            }}
-                    // onChange={e => setMetaTitle(e.target.value)}
+                    onChange={(e) => props.setImageAlt(e.target.value, props.image.id)}
                 />
                 <TextField label={'Order'}
                            size={'small'}
@@ -32,16 +35,16 @@ const ProductImageFied = (props: { image: ProductImage }) => {
                            inputProps={{
                                maxLength: 70
                            }}
-                    // onChange={e => setMetaTitle(e.target.value)}
                 />
-                <Button type={'button'}
+                <Button sx={{mt: 2}}
+                        type={'button'}
                         color={'error'}
                         variant="contained"
-                        // onClick={removeImage}
+                        onClick={(e) => props.removeImage(props.image.image, props.image.id, e)}
                 >Remove</Button>
             </Box>
         </Box>
     )
 }
 
-export default ProductImageFied;
+export default ProductImageField;

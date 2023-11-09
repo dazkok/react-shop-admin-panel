@@ -13,9 +13,10 @@ import diacritics from "diacritics";
 import ImageUpload from "../../components/dropzone/ImageUpload";
 import {ProductImage} from "../../models/product-image";
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import ProductImageFied from "./ProductImageField";
+import ProductImageField from "./ProductImageField";
+import {useStrictDroppable} from "../../components/droppable/UseStrictDroppable";
 
-const ProductForm = (props: any) => {
+const ProductForm = React.memo((props: any) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category_id, setCategoryId] = useState(0);
@@ -32,6 +33,7 @@ const ProductForm = (props: any) => {
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
     const [redirect, setRedirect] = useState(false);
+    const [enabled] = useStrictDroppable(loading);
 
     useEffect(() => {
         (
@@ -57,8 +59,6 @@ const ProductForm = (props: any) => {
                     setPrice(data.price);
                     if (data.promo_price !== null) {
                         setPromoPrice(data.promo_price);
-                    } else {
-                        setPromoPrice(0)
                     }
                     setQuantity(data.quantity);
                     setLink(data.link);
@@ -88,15 +88,6 @@ const ProductForm = (props: any) => {
         setLink(sanitizedString);
     }
 
-    // const imageField = () => {
-    //     if (image) {
-    //         return (
-    //
-    //         )
-    //     } else {
-    //         return ;
-    //     }
-    // }
     const handleImageUpload = (uploadedFilesNames: string[]) => {
         setImages(prevImages => {
             const newImages = uploadedFilesNames.map(imageName => ({
@@ -112,26 +103,58 @@ const ProductForm = (props: any) => {
         });
     }
 
-    const removeImage = async (e: SyntheticEvent) => {
-        e.preventDefault()
+    const setImageAlt = (alt: string, id: number) => {
+        const updatedImages = images.map((image) =>
+            image.id === id ? {...image, alt: alt} : image
+        );
 
-        // await axios.post(`file/destroy`, {'filename': image})
-        //     .then(response => {
-        //         setImage('');
-        //     })
-        //     .catch(error => {
-        //         console.error('Error while sending a file remove request:', error);
-        //     });
+        setImages(updatedImages);
     }
 
-    const handleDragEnd = (result: any) => {
+    const removeImage = async (imageName: string, imageId: number, e: SyntheticEvent) => {
+        e.preventDefault()
+
+        await axios.post(`file/destroy`, {'filename': imageName})
+            .then(response => {
+                const updatedImages = images.filter(image => image.image !== imageName);
+
+                if (imageId !== 0) {
+                    axios.post(`products/destroy-image`, {'id': imageId})
+                        .then(response => {
+                            console.log('Image has been removed from database');
+                        })
+                        .catch(error => {
+                            console.error('Error while deleting an image from the database:', error);
+                        })
+                }
+
+                setImages(updatedImages);
+            })
+            .catch(error => {
+                console.error('Error while sending a file remove request:', error);
+            });
+    }
+
+    const handleDragEnd = async (result: any) => {
         if (!result.destination) {
             return;
         }
 
-        const reorderedImages = Array.from(images);
-        const [reorderedImage] = reorderedImages.splice(result.source.index, 1);
-        reorderedImages.splice(result.destination.index, 0, reorderedImage);
+        const {source, destination} = result;
+        if (source.index === destination.index) {
+            return;
+        }
+
+        const reorderedImages = [...images];
+
+        // Remove the dragged item from its old position
+        const [draggedImage] = reorderedImages.splice(source.index, 1);
+        // Paste the dragged item to a new position
+        reorderedImages.splice(destination.index, 0, draggedImage);
+
+        reorderedImages.forEach((image, index) => {
+            image.order = index;
+        });
 
         setImages(reorderedImages);
     };
@@ -139,6 +162,43 @@ const ProductForm = (props: any) => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
 
+        if (category_id === 0) {
+            alert('Select category!')
+            return;
+        }
+
+        const data = {
+            title,
+            description,
+            category_id,
+            price,
+            promo_price,
+            quantity,
+            link,
+            order,
+            enable,
+            meta_title,
+            meta_description,
+            images
+        };
+
+        if (id) {
+            await axios.put(`products/${id}`, data)
+                .then(response => {
+                    setRedirect(true);
+                })
+                .catch(error => {
+                    console.error('Error while sending a request:', error);
+                });
+        } else {
+            await axios.post('products/store', data)
+                .then(response => {
+                    setRedirect(true);
+                })
+                .catch(error => {
+                    console.error('Error while sending a request:', error);
+                });
+        }
     }
 
     if (redirect) {
@@ -270,25 +330,36 @@ const ProductForm = (props: any) => {
                                 <ImageUpload maxFiles={10} handleImageUpload={handleImageUpload}/>
 
                                 <DragDropContext onDragEnd={handleDragEnd}>
-                                    <Droppable droppableId="images-dnd">
+                                    {enabled && <Droppable droppableId="images-dnd" direction={"horizontal"}>
                                         {(provided) => (
-                                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                            <Box sx={{
+                                                display: 'flex',
+                                                overflow: 'auto',
+                                                my: 3,
+                                                minHeight: '200px',
+                                                border: '1px solid lightgray'
+                                            }} ref={provided.innerRef} {...provided.droppableProps}>
                                                 {images.map((image, index) => (
-                                                    <Draggable key={image.image} draggableId={image.image} index={index}>
+                                                    <Draggable key={image.image} draggableId={image.image}
+                                                               index={index}>
                                                         {(provided) => (
                                                             <div
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                             >
-                                                                <ProductImageFied image={image}/>
+                                                                <ProductImageField image={image}
+                                                                                   removeImage={removeImage}
+                                                                                   setImageAlt={setImageAlt}
+                                                                />
                                                             </div>
                                                         )}
                                                     </Draggable>
                                                 ))}
-                                            </div>
+                                                {provided.placeholder}
+                                            </Box>
                                         )}
-                                    </Droppable>
+                                    </Droppable>}
                                 </DragDropContext>
 
                                 <Divider sx={{my: 3}}/>
@@ -329,6 +400,6 @@ const ProductForm = (props: any) => {
             </Grid>
         </Layout>
     );
-};
+});
 
 export default ProductForm;

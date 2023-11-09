@@ -24,7 +24,7 @@ const CategoryHeader = ({id, image, title, deleteFunction}: {
                 display: 'flex',
                 alignItems: 'center'
             }}>
-                <img src={image} alt={''} loading="lazy" height={'40px'} width={'80px'}/>
+                <img src={image} alt={''} loading="lazy" height={'60px'} width={'60px'} style={{objectFit: 'cover'}}/>
                 <Typography sx={{ml: 2}}>{title}</Typography>
             </Box>
             <ButtonGroup>

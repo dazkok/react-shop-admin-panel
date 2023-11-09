@@ -42,7 +42,7 @@ const ImageUpload = (props: any) => {
                         'Content-Type': 'multipart/form-data',
                     },
                 })
-                    .then(response => response.data); // Отримуємо відповідь і повертаємо її як результат обіцянки
+                    .then(response => response.data);
             });
 
             Promise.all(uploadPromises)

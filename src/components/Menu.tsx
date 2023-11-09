@@ -19,7 +19,7 @@ export const mainListItems = (
                 <ListItemIcon>
                     <DashboardRoundedIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Dashboard"/>
+                <ListItemText primary="Pages"/>
             </ListItemButton>
         </Link>
 
@@ -37,7 +37,7 @@ export const mainListItems = (
                 <ListItemIcon>
                     <PeopleRoundedIcon/>
                 </ListItemIcon>
-                <ListItemText primary="Customers"/>
+                <ListItemText primary="Users"/>
             </ListItemButton>
         </Link>
 

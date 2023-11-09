@@ -47,7 +47,9 @@ const CategoryForm = (props: any) => {
                     setTitle(data.title);
                     setLink(data.link);
                     setImage(data.image);
-                    setDescription(data.description);
+                    if (data.description !== null) {
+                        setDescription(data.description);
+                    }
                     setOrder(data.order);
                     setEnable(data.enable);
                     setMetaTitle(data.meta_title);
@@ -84,7 +86,7 @@ const CategoryForm = (props: any) => {
                     <Button type={'button'}
                             color={'error'}
                             variant="contained"
-                            onClick={removeImage}
+                            onClick={(e) => removeImage(e)}
                             sx={{ml: 3}}
                     >Remove</Button>
                 </>
