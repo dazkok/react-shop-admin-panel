@@ -17,8 +17,10 @@ import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import {Avatar, Tooltip} from "@mui/material";
+import { useLocation } from 'react-router-dom';
 
 const Nav = (props: { user: User | null }) => {
+    const location = useLocation();
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -102,6 +104,19 @@ const Nav = (props: { user: User | null }) => {
         };
     }
 
+    function getPageName(pathname: string) {
+        const routeMap = {
+            '/users': 'Users',
+            '/pages': 'Pages',
+            '/categories': 'Categories',
+            '/products': 'Products',
+            '/orders': 'Orders',
+            '/profile': 'Profile',
+        };
+
+        return routeMap[pathname as keyof typeof routeMap] || '';
+    }
+
     const logout = async () => {
         await axios.post('logout');
     }
@@ -134,7 +149,7 @@ const Nav = (props: { user: User | null }) => {
                         noWrap
                         sx={{flexGrow: 1}}
                     >
-                        Page Name
+                        {getPageName(location.pathname)}
                     </Typography>
 
                     <Link to={'/profile'} className="nav-link">

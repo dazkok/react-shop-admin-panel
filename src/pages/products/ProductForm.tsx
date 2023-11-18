@@ -9,12 +9,12 @@ import Box from "@mui/material/Box";
 import DraftField from "../../components/draft-js/DraftField";
 import Divider from "@mui/material/Divider";
 import {Category} from "../../models/category";
-import diacritics from "diacritics";
 import ImageUpload from "../../components/dropzone/ImageUpload";
 import {ProductImage} from "../../models/product-image";
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import ProductImageField from "./ProductImageField";
 import {useStrictDroppable} from "../../components/droppable/UseStrictDroppable";
+import TextToLinkField from "../../components/form-components/TextToLinkField";
 
 const ProductForm = React.memo((props: any) => {
     const [title, setTitle] = useState('');
@@ -74,19 +74,6 @@ const ProductForm = React.memo((props: any) => {
             setLoading(false);
         }
     }, []);
-
-    const setTitleAndLink = (inputString: string) => {
-        setTitle(inputString);
-        const stringWithoutDiacritics = diacritics.remove(inputString);
-
-        const sanitizedString = stringWithoutDiacritics
-            .replace(/[^\w\s-]/g, '')  // Remove non-alphanumeric characters except spaces and hyphens
-            .trim()                 // Trim leading and trailing spaces
-            .replace(/\s+/g, '-')    // Replace spaces with hyphens
-            .toLowerCase();          // Convert to lowercase
-
-        setLink(sanitizedString);
-    }
 
     const handleImageUpload = (uploadedFilesNames: string[]) => {
         setImages(prevImages => {
@@ -251,26 +238,13 @@ const ProductForm = React.memo((props: any) => {
                                     })}
                                 </TextField>
 
-                                <Grid container spacing={2}>
-                                    <Grid item xs={6}>
-                                        <TextField label={'Title'}
-                                                   value={title}
-                                                   margin="normal"
-                                                   required
-                                                   fullWidth
-                                                   onChange={e => setTitleAndLink(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <TextField label={'Link'}
-                                                   value={link}
-                                                   margin="normal"
-                                                   required
-                                                   disabled={true}
-                                                   fullWidth
-                                        />
-                                    </Grid>
-                                </Grid>
+                                <TextToLinkField
+                                    text={title}
+                                    setText={setTitle}
+                                    textPlaceholder={'Title'}
+                                    link={link}
+                                    setLink={setLink}
+                                />
 
                                 <div className={'text-start mt-3'}>Description:</div>
                                 {!loading && <DraftField editorText={description} returnFunction={setDescription}/>}

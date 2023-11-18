@@ -3,7 +3,6 @@ import './App.css';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Users from "./pages/users/Users";
 import UserForm from "./pages/users/UserForm";
-// import Links from "./pages/Links";
 import Login from "./pages/Login";
 import RedirectToUsers from "./components/RedirectToUsers";
 import Products from "./pages/products/Products";
@@ -12,6 +11,8 @@ import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import Categories from "./pages/categories/Categories";
 import CategoryForm from "./pages/categories/CategoryForm";
+import Pages from "./pages/pages/Pages";
+import PageForm from "./pages/pages/PageForm";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
             <Route path={'/users'} caseSensitive element={<Users/>}/>
             <Route path={'/users/create'} element={<UserForm/>}/>
             <Route path={'/users/:id/edit'} element={<UserForm/>}/>
+
+            <Route path={'/pages'} element={<Pages/>}/>
+            <Route path={'/pages/create'} element={<PageForm/>}/>
+            <Route path={'/pages/:id/edit'} element={<PageForm/>}/>
 
             <Route path={'/categories'} element={<Categories/>}/>
             <Route path={'/categories/create'} element={<CategoryForm/>}/>

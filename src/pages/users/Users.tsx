@@ -35,11 +35,15 @@ const Users = () => {
     useEffect(() => {
         (
             async () => {
-                const {data} = await axios.get('users');
+                try {
+                    const {data} = await axios.get('users');
 
-                setUsers(data);
-                setFilteredTable(data);
-                setLoading(false);
+                    setUsers(data);
+                    setFilteredTable(data);
+                    setLoading(false);
+                } catch (error) {
+                    console.log(error);
+                }
             }
         )()
     }, []);

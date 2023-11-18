@@ -14,7 +14,7 @@ import Divider from "@mui/material/Divider";
 
 export const mainListItems = (
     <React.Fragment>
-        <Link to={'/'} className={'menu-link'}>
+        <Link to={'/pages'} className={'menu-link'}>
             <ListItemButton>
                 <ListItemIcon>
                     <DashboardRoundedIcon/>

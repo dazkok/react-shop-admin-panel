@@ -6,52 +6,56 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {Category} from "../../models/category";
 import ImageUpload from "../../components/dropzone/ImageUpload";
 import removeImage from "../../components/dropzone/RemoveImage";
 import Divider from "@mui/material/Divider";
 import DraftField from "../../components/draft-js/DraftField";
+import {Page} from "../../models/page";
 import TextToLinkField from "../../components/form-components/TextToLinkField";
 
 const CategoryForm = (props: any) => {
     const {id} = useParams();
     const [level, setLevel] = useState(0);
     const [title, setTitle] = useState('');
-    const [link, setLink] = useState('');
     const [image, setImage] = useState('');
     const [description, setDescription] = useState('');
-    const [order, setOrder] = useState(99);
+    const [link, setLink] = useState('');
+    const [position, setPosition] = useState('');
+    const [type, setType] = useState('');
     const [enable, setEnable] = useState(false);
+    const [order, setOrder] = useState(99);
     const [meta_title, setMetaTitle] = useState('');
     const [meta_description, setMetaDescription] = useState('');
     const [index, setIndex] = useState('none');
     const [redirect, setRedirect] = useState(false);
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [pages, setPages] = useState<Page[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (
             async () => {
-                const {data} = await axios.get('categories');
+                const {data} = await axios.get('pages/leveled');
 
-                setCategories(data);
+                setPages(data);
             }
         )();
 
         if (id) {
             (
                 async () => {
-                    const {data} = await axios.get(`categories/${id}`);
+                    const {data} = await axios.get(`pages/${id}`);
 
                     setLevel(data.level);
                     setTitle(data.title);
-                    setLink(data.link);
                     setImage(data.image);
                     if (data.description !== null) {
                         setDescription(data.description);
                     }
-                    setOrder(data.order);
+                    setPosition(data.position);
+                    setType(data.type);
+                    setLink(data.link);
                     setEnable(data.enable);
+                    setOrder(data.order);
                     setMetaTitle(data.meta_title);
                     setMetaDescription(data.meta_description);
                     setIndex(data.index);
@@ -93,6 +97,8 @@ const CategoryForm = (props: any) => {
             level,
             title,
             link,
+            position,
+            type,
             description,
             order,
             image,
@@ -103,7 +109,7 @@ const CategoryForm = (props: any) => {
         };
 
         if (id) {
-            await axios.put(`categories/${id}`, data)
+            await axios.put(`pages/${id}`, data)
                 .then(response => {
                     setRedirect(true);
                 })
@@ -111,7 +117,7 @@ const CategoryForm = (props: any) => {
                     console.error('Error while sending a request:', error);
                 });
         } else {
-            await axios.post('categories/store', data)
+            await axios.post('pages/store', data)
                 .then(response => {
                     setRedirect(true);
                 })
@@ -122,7 +128,7 @@ const CategoryForm = (props: any) => {
     }
 
     if (redirect) {
-        return <Navigate to={'/categories'}/>
+        return <Navigate to={'/pages'}/>
     }
 
     return (
@@ -135,7 +141,7 @@ const CategoryForm = (props: any) => {
                         <Paper className={'text-start'}
                                sx={{py: 3, px: 3, display: 'flex', flexDirection: 'column', alignItems: 'start'}}>
                             <Typography component="h2" variant="h5">
-                                {id ? "Edit category" : "Add new category"}
+                                {id ? "Edit page" : "Add new page"}
                             </Typography>
 
                             <Box component="form" onSubmit={submit} sx={{mt: 1, width: '100%'}}>
@@ -143,20 +149,20 @@ const CategoryForm = (props: any) => {
                                            margin="normal"
                                            select
                                            value={level.toString()}
-                                           label="Select category level"
+                                           label="Select page level"
                                            onChange={e => setLevel(parseInt(e.target.value))}
                                 >
                                     <MenuItem value={'0'}>Main</MenuItem>
-                                    {categories.map((category) => {
+                                    {pages.map((page) => {
                                         const items = [];
                                         items.push(
-                                            <MenuItem key={category.id} value={category.id.toString()}>-
-                                                - {category.title}</MenuItem>
+                                            <MenuItem key={page.id} value={page.id.toString()}>-
+                                                - {page.title}</MenuItem>
                                         );
-                                        category.subcategories.forEach((subcategory) => {
+                                        page.subpages.forEach((subpage) => {
                                             items.push(
-                                                <MenuItem key={subcategory.id} value={subcategory.id.toString()}>- - -
-                                                    - {subcategory.title}</MenuItem>
+                                                <MenuItem key={subpage.id} value={subpage.id.toString()}>- - -
+                                                    - {subpage.title}</MenuItem>
                                             );
                                         });
                                         return items;
@@ -170,6 +176,32 @@ const CategoryForm = (props: any) => {
                                     link={link}
                                     setLink={setLink}
                                 />
+
+                                <TextField fullWidth
+                                           margin="normal"
+                                           select
+                                           value={position}
+                                           label="Page visible in"
+                                           onChange={e => setPosition(e.target.value)}
+                                >
+                                    <MenuItem value={'header'}>Header</MenuItem>
+                                    <MenuItem value={'footer'}>Footer</MenuItem>
+                                    <MenuItem value={'header_footer'}>Header | Footer</MenuItem>
+                                </TextField>
+
+                                <TextField fullWidth
+                                           margin="normal"
+                                           select
+                                           value={type}
+                                           label="Page type"
+                                           onChange={e => setType(e.target.value)}
+                                >
+                                    <MenuItem value={'custom'}>Custom</MenuItem>
+                                    <MenuItem value={'home'}>Home</MenuItem>
+                                    <MenuItem value={'contact'}>Contact</MenuItem>
+                                    <MenuItem value={'login'}>Login</MenuItem>
+                                    <MenuItem value={'register'}>Register</MenuItem>
+                                </TextField>
 
                                 <div className={'text-start mt-3'}>Image:</div>
                                 {imageField()}
@@ -190,7 +222,7 @@ const CategoryForm = (props: any) => {
                                            margin="normal"
                                            select
                                            value={enable ? '1' : '0'}
-                                           label="Is the category enabled?"
+                                           label="Is the page enabled?"
                                            onChange={e => setEnable(e.target.value === '1')}
                                 >
                                     <MenuItem value={'1'}>Enabled</MenuItem>
