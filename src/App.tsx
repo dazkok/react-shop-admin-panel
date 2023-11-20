@@ -13,8 +13,10 @@ import Categories from "./pages/categories/Categories";
 import CategoryForm from "./pages/categories/CategoryForm";
 import Pages from "./pages/pages/Pages";
 import PageForm from "./pages/pages/PageForm";
+import Elements from "./pages/elements/Elements";
+import ElementForm from "./pages/elements/ElementForm";
 
-function App() {
+function App(props: any) {
   return (
       <div className="App">
         <BrowserRouter>
@@ -30,6 +32,10 @@ function App() {
             <Route path={'/pages/create'} element={<PageForm/>}/>
             <Route path={'/pages/:id/edit'} element={<PageForm/>}/>
 
+            <Route path={'/elements/:location/create'} caseSensitive element={<ElementForm/>}/>
+            <Route path={'/elements/:location'} element={<Elements/>}/>
+            <Route path={'/elements/:location/:id/edit'} element={<ElementForm/>}/>
+
             <Route path={'/categories'} element={<Categories/>}/>
             <Route path={'/categories/create'} element={<CategoryForm/>}/>
             <Route path={'/categories/:id/edit'} element={<CategoryForm/>}/>
@@ -37,6 +43,7 @@ function App() {
             <Route path={'/products'} element={<Products/>}/>
             <Route path={'/products/create'} element={<ProductForm/>}/>
             <Route path={'/products/:id/edit'} element={<ProductForm/>}/>
+
 
             <Route path={'/orders'} element={<Orders/>}/>
             <Route path={'/profile'} element={<Profile/>}/>

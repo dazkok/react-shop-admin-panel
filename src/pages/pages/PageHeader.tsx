@@ -6,6 +6,7 @@ import {ButtonGroup, Tooltip} from "@mui/material";
 import Button from "@mui/material/Button";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import VerticalSplitRoundedIcon from '@mui/icons-material/VerticalSplitRounded';
 
 const PageHeader = (props: { page: Page, deleteFunction: Function }) => {
     return (
@@ -44,6 +45,16 @@ const PageHeader = (props: { page: Page, deleteFunction: Function }) => {
                         <EditRoundedIcon/>
                     </Button>
                 </Tooltip>
+
+                {props.page.type === 'custom' ? (
+                    <Tooltip title={'Page elements'}>
+                        <Button variant="outlined"
+                                size={'small'} color={"primary"}
+                                href={`/elements/page-${props.page.id}`}>
+                            <VerticalSplitRoundedIcon/>
+                        </Button>
+                    </Tooltip>
+                ) : ''}
 
                 <Tooltip title={'Delete'}>
                     <Button variant="outlined"
