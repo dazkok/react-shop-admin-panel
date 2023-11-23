@@ -149,7 +149,7 @@ const Products = () => {
                                             {filteredTable.slice(page * perPage, (page + 1) * perPage).map((product, index) => {
                                                 return (
                                                     <TableRow key={product.id}>
-                                                        <TableCell>{product.id}</TableCell>
+                                                        <TableCell>{product.order}</TableCell>
                                                         <TableCell>
                                                             <img
                                                                 src={product.image ? 'http://localhost:8010/images/' + product.image.image : ''}
@@ -173,7 +173,7 @@ const Products = () => {
                                                                     </div>
                                                                 ) : (
                                                                     <div style={{whiteSpace: 'nowrap'}}>
-                                                                        product.price + ' PLN'
+                                                                        {product.price} PLN
                                                                     </div>
                                                                 )}
                                                         </TableCell>

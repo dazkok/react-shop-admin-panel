@@ -28,7 +28,7 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
                     <Tooltip title={'Delete'}>
                         <Button variant="outlined"
                                 size={'small'} color={"error"}
-                            onClick={() => props.deleteFunction(props.element.id)}
+                                onClick={() => props.deleteFunction(props.element.id)}
                         >
                             <DeleteRoundedIcon/>
                         </Button>
@@ -41,7 +41,7 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
                     <Typography variant={'h4'} sx={{mb: 3}}>
                         {props.element.title}
                     </Typography>
-                    <div dangerouslySetInnerHTML={{ __html: props.element.text }} />
+                    <div dangerouslySetInnerHTML={{__html: props.element.text}}/>
                 </>
 
             ) : props.element.style === 'image' ? (
@@ -58,7 +58,7 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
                         <Typography variant={'h4'} sx={{mb: 3}}>
                             {props.element.title}
                         </Typography>
-                        <div dangerouslySetInnerHTML={{ __html: props.element.text }} />
+                        <div dangerouslySetInnerHTML={{__html: props.element.text}}/>
                     </Grid>
                     <Grid item xs={6}>
                         <img src={'http://localhost:8010/images/' + props.element.image} alt={'preview'} width={'100%'}
@@ -80,9 +80,23 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
                         <Typography variant={'h4'} sx={{mb: 3}}>
                             {props.element.title}
                         </Typography>
-                        <div dangerouslySetInnerHTML={{ __html: props.element.text }} />
+                        <div dangerouslySetInnerHTML={{__html: props.element.text}}/>
                     </Grid>
                 </Grid>
+            ) : props.element.style === 'custom' ? (
+                <>
+                    <Typography variant={'h4'} sx={{mb: 3}}>
+                        {props.element.title}
+                    </Typography>
+
+                    <div dangerouslySetInnerHTML={{__html: props.element.text}}/>
+
+                    <Button type={'button'} variant={'contained'} sx={{my: 3}}>{props.element.additional_field}</Button>
+                    &nbsp; Link: {props.element.link}
+                    <br/>
+                    <img src={'http://localhost:8010/images/' + props.element.image} alt={'preview'} width={'auto'}
+                         height={'auto'} style={{objectFit: 'contain', maxHeight: '400px', maxWidth: '100%'}}/>
+                </>
             ) : 'Style not found'}
         </Box>
     );

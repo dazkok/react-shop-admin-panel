@@ -7,10 +7,17 @@ import Button from "@mui/material/Button";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import VerticalSplitRoundedIcon from '@mui/icons-material/VerticalSplitRounded';
+import BurstModeRoundedIcon from '@mui/icons-material/BurstModeRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 
 const PageHeader = (props: { page: Page, deleteFunction: Function }) => {
+    const boxStyle = {
+        backgroundColor: props.page.enable ? 'white' : 'lightgray'
+    }
+
     return (
         <Box sx={{
+            ...boxStyle,
             display: 'flex',
             justifyContent: 'space-between',
             width: '100%',
@@ -54,12 +61,29 @@ const PageHeader = (props: { page: Page, deleteFunction: Function }) => {
                             <VerticalSplitRoundedIcon/>
                         </Button>
                     </Tooltip>
+                ) : props.page.type === 'home' ? (
+                    <>
+                        <Tooltip title={'Slider elements'}>
+                            <Button variant="outlined"
+                                    size={'small'} color={"secondary"}
+                                    href={`/elements/home-page-slider`}>
+                                <BurstModeRoundedIcon/>
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title={'Advantages'}>
+                            <Button variant="outlined"
+                                    size={'small'} color={"secondary"}
+                                    href={`/elements/home-advantages`}>
+                                <FactCheckRoundedIcon/>
+                            </Button>
+                        </Tooltip>
+                    </>
                 ) : ''}
 
                 <Tooltip title={'Delete'}>
                     <Button variant="outlined"
                             size={'small'} color={"error"}
-                        onClick={() => props.deleteFunction(props.page.id)}
+                            onClick={() => props.deleteFunction(props.page.id)}
                     >
                         <DeleteRoundedIcon/>
                     </Button>

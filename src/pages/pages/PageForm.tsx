@@ -184,6 +184,7 @@ const CategoryForm = (props: any) => {
                                            label="Page visible in"
                                            onChange={e => setPosition(e.target.value)}
                                 >
+                                    <MenuItem value={'hidden'}>Hidden</MenuItem>
                                     <MenuItem value={'header'}>Header</MenuItem>
                                     <MenuItem value={'footer'}>Footer</MenuItem>
                                     <MenuItem value={'header_footer'}>Header | Footer</MenuItem>

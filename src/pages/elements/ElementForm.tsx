@@ -57,7 +57,10 @@ const ElementForm = () => {
         if (image) {
             return (
                 <>
-                    <img src={'http://localhost:8010/images/' + image} alt={'preview'} loading={'lazy'} height={'200px'}
+                    <img src={'http://localhost:8010/images/' + image}
+                         alt={'preview'}
+                         loading={'lazy'} height={'auto'}
+                         style={{maxWidth: '100%', objectFit: 'contain', maxHeight: '400px'}}
                          className={'mb-3'}/>
                     <Button type={'button'}
                             color={'error'}
@@ -134,6 +137,7 @@ const ElementForm = () => {
                                            label="Style"
                                            onChange={e => setStyle(e.target.value)}
                                 >
+                                    <MenuItem value={'custom'}>Custom</MenuItem>
                                     <MenuItem value={'text'}>Text</MenuItem>
                                     <MenuItem value={'image'}>Image</MenuItem>
                                     <MenuItem value={'text-image'}>Text - Image</MenuItem>
@@ -207,23 +211,39 @@ const ElementForm = () => {
                                             {!loading && <DraftField editorText={text} returnFunction={setText}/>}
                                         </Grid>
                                     </Grid>
+                                ) : style === 'custom' ? (
+                                    <>
+                                        <TextField label={'Title'}
+                                                   type={'text'}
+                                                   value={title}
+                                                   margin="normal"
+                                                   fullWidth
+                                                   onChange={e => setTitle(e.target.value)}
+                                        />
+
+                                        <div className={'text-start mt-3'}>Text:</div>
+                                        {!loading && <DraftField editorText={text} returnFunction={setText}/>}
+
+                                        <div className={'text-start mt-3'}>Image:</div>
+                                        {imageField()}
+
+                                        <TextField label={'Additional field'}
+                                                   type={'text'}
+                                                   value={additional_field}
+                                                   margin="normal"
+                                                   fullWidth
+                                                   onChange={e => setAdditionalField(e.target.value)}
+                                        />
+
+                                        <TextField label={'Link'}
+                                                   type={'text'}
+                                                   value={link}
+                                                   margin="normal"
+                                                   fullWidth
+                                                   onChange={e => setLink(e.target.value)}
+                                        />
+                                    </>
                                 ) : 'Select style'}
-
-                                {/*<TextField label={'Additional field'}*/}
-                                {/*           type={'text'}*/}
-                                {/*           value={additional_field}*/}
-                                {/*           margin="normal"*/}
-                                {/*           fullWidth*/}
-                                {/*           onChange={e => setAdditionalField(e.target.value)}*/}
-                                {/*/>*/}
-
-                                {/*<TextField label={'Link'}*/}
-                                {/*           type={'text'}*/}
-                                {/*           value={link}*/}
-                                {/*           margin="normal"*/}
-                                {/*           fullWidth*/}
-                                {/*           onChange={e => setLink(e.target.value)}*/}
-                                {/*/>*/}
 
                                 <TextField label={'Order'}
                                            type={'number'}

@@ -50,11 +50,11 @@ const ProductForm = React.memo((props: any) => {
                     const {data} = await axios.get(`products/${id}`);
 
                     setTitle(data.title);
-                    setDescription(data.description);
+                    if (data.description !== null) {
+                        setDescription(data.description);
+                    }
                     if (data.category_id !== null) {
                         setCategoryId(data.category_id);
-                    } else {
-                        setCategoryId(0)
                     }
                     setPrice(data.price);
                     if (data.promo_price !== null) {
