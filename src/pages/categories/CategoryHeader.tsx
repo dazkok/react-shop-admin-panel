@@ -6,15 +6,21 @@ import Button from "@mui/material/Button";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
-const CategoryHeader = ({id, image, title, deleteFunction}: {
+const CategoryHeader = ({id, image, title, enable, deleteFunction}: {
     id: number,
     image: string,
     title: string,
+    enable: boolean,
     deleteFunction: Function
 }) => {
 
+    const boxStyle = {
+        backgroundColor: enable ? 'white' : 'lightgray'
+    }
+
     return (
         <Box sx={{
+            ...boxStyle,
             display: 'flex',
             justifyContent: 'space-between',
             width: '100%',

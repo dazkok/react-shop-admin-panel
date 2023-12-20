@@ -22,6 +22,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import DeleteDialog from "../../components/dialogs/DeleteDialog";
 import {Product} from "../../models/product";
+import RttRoundedIcon from '@mui/icons-material/RttRounded';
 
 const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -190,6 +191,14 @@ const Products = () => {
                                                                             color={"primary"}
                                                                             href={`/products/${product.id}/edit`}>
                                                                         <EditRoundedIcon/>
+                                                                    </Button>
+                                                                </Tooltip>
+
+                                                                <Tooltip title={'Edit'}>
+                                                                    <Button variant="outlined" size={'small'}
+                                                                            color={"primary"}
+                                                                            href={`/elements/product-${product.id}`}>
+                                                                        <RttRoundedIcon/>
                                                                     </Button>
                                                                 </Tooltip>
 

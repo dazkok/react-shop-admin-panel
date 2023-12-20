@@ -149,6 +149,7 @@ const Categories = (props: any) => {
                                             >
                                                 <CategoryHeader id={category.id}
                                                                 title={category.title}
+                                                                enable={category.enable}
                                                                 image={'http://localhost:8010/images/' + category.image}
                                                                 deleteFunction={handleClickOpenDeleteDialog}
                                                 />
@@ -163,6 +164,7 @@ const Categories = (props: any) => {
                                                             >
                                                                 <CategoryHeader id={subcategory.id}
                                                                                 title={subcategory.title}
+                                                                                enable={subcategory.enable}
                                                                                 image={'http://localhost:8010/images/' + subcategory.image}
                                                                                 deleteFunction={handleClickOpenDeleteDialog}
                                                                 />
@@ -174,6 +176,7 @@ const Categories = (props: any) => {
                                                                         <Box key={index3} sx={{p: 2, boxShadow: 1}}>
                                                                             <CategoryHeader id={subcategory3.id}
                                                                                             title={subcategory3.title}
+                                                                                            enable={subcategory3.enable}
                                                                                             image={'http://localhost:8010/images/' + subcategory3.image}
                                                                                             deleteFunction={handleClickOpenDeleteDialog}
                                                                             />
