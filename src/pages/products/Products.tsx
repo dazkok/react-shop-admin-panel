@@ -81,6 +81,8 @@ const Products = () => {
             if (result.status === 204) {
                 setProducts(products.filter(product => product.id !== id));
                 setFilteredTable(filteredTable.filter(product => product.id !== id));
+            } else if (result.status === 226) {
+                alert('You cannot delete an item because it is in the customer\'s cart. But you can exclude it in the "Enabled" field.');
             } else {
                 alert('Product deletion failed.');
             }
@@ -148,12 +150,19 @@ const Products = () => {
                                         </TableHead>
                                         <TableBody>
                                             {filteredTable.slice(page * perPage, (page + 1) * perPage).map((product, index) => {
+                                                let productImage = product.image ? product.image.image : 'placeholder.svg';
+                                                let disabledStyle;
+
+                                                if (!product.enable) {
+                                                }
+
                                                 return (
-                                                    <TableRow key={product.id}>
+                                                    <TableRow key={product.id}
+                                                              style={{background: !product.enable ? "lightgray" : "inherit"}}>
                                                         <TableCell>{product.order}</TableCell>
                                                         <TableCell>
                                                             <img
-                                                                src={product.image ? 'http://localhost:8010/images/' + product.image.image : ''}
+                                                                src={'http://localhost:8010/images/' + productImage}
                                                                 alt={''}
                                                                 loading="lazy"
                                                                 style={{objectFit: 'cover'}}
