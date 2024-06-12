@@ -24,6 +24,14 @@ const ElementForm = () => {
     const [redirect, setRedirect] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    const stylesWithoutSelect = ['product-detail', 'another-style'];
+
+    useEffect(() => {
+        if (location && location.startsWith('product-details-')) {
+            setStyle('product-detail');
+        }
+    }, [location]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -126,23 +134,25 @@ const ElementForm = () => {
                         <Paper className={'text-start'}
                                sx={{py: 3, px: 3, display: 'flex', flexDirection: 'column', alignItems: 'start'}}>
                             <Typography component="h2" variant="h5">
-                                {id ? "Edit category" : "Add new category"}
+                                {id ? "Edit element" : "Add new element"}
                             </Typography>
 
                             <Box component="form" onSubmit={submit} sx={{mt: 1, width: '100%'}}>
-                                <TextField fullWidth
-                                           margin="normal"
-                                           select
-                                           value={style}
-                                           label="Style"
-                                           onChange={e => setStyle(e.target.value)}
-                                >
-                                    <MenuItem value={'custom'}>Custom</MenuItem>
-                                    <MenuItem value={'text'}>Text</MenuItem>
-                                    <MenuItem value={'image'}>Image</MenuItem>
-                                    <MenuItem value={'text-image'}>Text - Image</MenuItem>
-                                    <MenuItem value={'image-text'}>Image - Text</MenuItem>
-                                </TextField>
+                                {!stylesWithoutSelect.includes(style) && (
+                                    <TextField fullWidth
+                                               margin="normal"
+                                               select
+                                               value={style}
+                                               label="Style"
+                                               onChange={e => setStyle(e.target.value)}
+                                    >
+                                        <MenuItem value={'custom'}>Custom</MenuItem>
+                                        <MenuItem value={'text'}>Text</MenuItem>
+                                        <MenuItem value={'image'}>Image</MenuItem>
+                                        <MenuItem value={'text-image'}>Text - Image</MenuItem>
+                                        <MenuItem value={'image-text'}>Image - Text</MenuItem>
+                                    </TextField>
+                                )}
 
                                 {style === 'text' ? (
                                     <>
@@ -241,6 +251,23 @@ const ElementForm = () => {
                                                    margin="normal"
                                                    fullWidth
                                                    onChange={e => setLink(e.target.value)}
+                                        />
+                                    </>
+                                ) : style === 'product-detail' ? (
+                                    <>
+                                        <TextField label={'Title'}
+                                                   type={'text'}
+                                                   value={title}
+                                                   margin="normal"
+                                                   fullWidth
+                                                   onChange={e => setTitle(e.target.value)}
+                                        />
+                                        <TextField label={'Value'}
+                                                   type={'text'}
+                                                   value={additional_field}
+                                                   margin="normal"
+                                                   fullWidth
+                                                   onChange={e => setAdditionalField(e.target.value)}
                                         />
                                     </>
                                 ) : 'Select style'}

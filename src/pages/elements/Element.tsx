@@ -15,7 +15,7 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
 
     return (
         <Box sx={{...boxStyle, boxShadow: 3, py: 3, px: 2}}>
-            <Box sx={{display: 'flex', justifyContent: 'end'}}>
+            <Box sx={{display: 'flex', justifyContent: 'end', mb: 2}}>
                 <ButtonGroup>
                     <Tooltip title={'Edit'}>
                         <Button variant="outlined"
@@ -96,6 +96,21 @@ const ElementComponent = (props: { element: PageElement, deleteFunction: Functio
                     <br/>
                     <img src={'http://localhost:8010/images/' + props.element.image} alt={'preview'} width={'auto'}
                          height={'auto'} style={{objectFit: 'contain', maxHeight: '400px', maxWidth: '100%'}}/>
+                </>
+            ) : props.element.style.startsWith('product-detail') ? (
+                <>
+                    <Grid container spacing={3}>
+                        <Grid item xs={5}>
+                            <Box sx={{p: 1, backgroundColor: "#ececec", textAlign: "center"}}>
+                                <b>{props.element.title}</b>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Box sx={{p: 1, backgroundColor: "#ececec", textAlign: "center"}}>
+                                {props.element.additional_field}
+                            </Box>
+                        </Grid>
+                    </Grid>
                 </>
             ) : 'Style not found'}
         </Box>

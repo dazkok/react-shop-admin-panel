@@ -20,6 +20,7 @@ import {
 import Button from '@mui/material/Button';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import ListIcon from '@mui/icons-material/List';
 import DeleteDialog from "../../components/dialogs/DeleteDialog";
 import {Product} from "../../models/product";
 import RttRoundedIcon from '@mui/icons-material/RttRounded';
@@ -203,11 +204,19 @@ const Products = () => {
                                                                     </Button>
                                                                 </Tooltip>
 
-                                                                <Tooltip title={'Edit'}>
+                                                                <Tooltip title={'Description'}>
                                                                     <Button variant="outlined" size={'small'}
                                                                             color={"primary"}
                                                                             href={`/elements/product-${product.id}`}>
                                                                         <RttRoundedIcon/>
+                                                                    </Button>
+                                                                </Tooltip>
+
+                                                                <Tooltip title={'Specification'}>
+                                                                    <Button variant="outlined" size={'small'}
+                                                                            color={"primary"}
+                                                                            href={`/elements/product-details-${product.id}`}>
+                                                                        <ListIcon/>
                                                                     </Button>
                                                                 </Tooltip>
 
