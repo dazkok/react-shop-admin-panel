@@ -1,35 +1,31 @@
-# Getting Started with Create React App
+# React Shop Admin Panel
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive admin panel built with React and TypeScript for managing e-commerce shops. This application provides a modern interface for managing products, categories, orders, users, and content pages.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Management**: Create, edit, and manage user accounts
+- **Product Management**: Full CRUD operations for products with image uploads
+- **Category Management**: Organize products with hierarchical categories
+- **Order Management**: Track and manage customer orders
+- **Content Management**: Manage static pages and custom elements
+- **Authentication**: Secure login system with user profiles
+- **Modern UI**: Built with Material-UI components for a professional look
+- **TypeScript**: Full type safety for better development experience
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Frontend**: React 18 with TypeScript
+- **UI Library**: Material-UI (MUI) v5
+- **State Management**: Redux Toolkit
+- **Routing**: React Router v6
+- **HTTP Client**: Axios
+- **Rich Text Editor**: Draft.js
+- **File Uploads**: React Dropzone
+- **Drag & Drop**: react-beautiful-dnd
+- **Build Tool**: Create React App
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
+## Prerequisites
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
@@ -39,8 +35,86 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Prerequisites
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Node.js 16+ 
+- npm or yarn
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd react-shop-admin
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+The application will be available at `http://localhost:3000`
+
+## Available Scripts
+
+- `npm start` - Runs the app in development mode
+- `npm test` - Launches the test runner
+- `npm run build` - Builds the app for production
+- `npm run eject` - Ejects from Create React App (one-way operation)
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Page components
+│   ├── users/     # User management pages
+│   ├── products/  # Product management pages
+│   ├── categories/# Category management pages
+│   ├── pages/     # Static page management
+│   └── elements/  # Custom element management
+├── models/        # TypeScript interfaces and types
+├── redux/         # Redux store and slices
+└── css/           # Custom styles
+```
+
+## API Configuration
+
+The application expects a REST API backend. Configure your API endpoints in the appropriate service files. Make sure your backend provides endpoints for:
+
+- Authentication (`/login`, `/profile`)
+- Users CRUD operations
+- Products CRUD operations
+- Categories CRUD operations
+- Orders management
+- Pages and Elements management
+
+## Environment Variables
+
+Create a `.env` file in the root directory:
+
+```
+REACT_APP_API_URL=http://your-api-url.com
+REACT_APP_API_KEY=your-api-key-if-needed
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support and questions, please open an issue in the repository.
